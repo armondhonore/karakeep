@@ -1,0 +1,29 @@
+application:
+  name: karakeep
+  pods:
+  - name: app
+    image: ghcr.io/karakeep-app/karakeep:latest
+    path: /
+    servicePorts:
+    - 3000
+    vars:
+      NEXTAUTH_SECRET: "a1b2c3d4e5f6a1b2c3d4"
+      NEXTAUTH_URL: "https://relaxed-weasel-karakeep.cloud.nexlayer.ai"
+      DATABASE_URL: "postgresql://karakeep:karakeep@postgres.pod:5432/karakeep"
+      REDIS_HOST: redis.pod
+  - name: postgres
+    image: postgres:16-alpine
+    servicePorts:
+    - 5432
+    vars:
+      POSTGRES_DB: karakeep
+      POSTGRES_USER: karakeep
+      POSTGRES_PASSWORD: karakeep
+    volumes:
+    - name: karakeep-db
+      mountPath: /var/lib/postgresql/data
+      size: 10Gi
+  - name: redis
+    image: redis:7-alpine
+    servicePorts:
+    - 6379
